@@ -2,7 +2,7 @@
 # Options in this menu will initiate other Calc instances
 
 from customtkinter import *
-from rpm import RpmCalc
+from calc import Rpm, Sf
 
 class Header(CTkFrame):
     def __init__(self, master, **kwargs):
@@ -15,7 +15,7 @@ class Header(CTkFrame):
                              "\nPlease select an option to start calculating")
         self.desc.grid(row=1, column=0, padx=55, pady=10, sticky=(W))
 
-class MainMenu(CTk):
+class Main(CTk):
     def __init__(self):
         super().__init__()
         # Window and Theme Settings
@@ -26,10 +26,13 @@ class MainMenu(CTk):
         self.header = Header(master=self)
         self.header.grid(row=0, column=0, padx=20, pady=5, sticky="nsew")
         # Content
-        self.content = RpmCalc(master=self)
-        self.content.grid(row=1, column=0, padx=20, pady=5, sticky="new")
+        self.calcrpm = Rpm(master=self)
+        self.calcrpm.grid(row=1, column=0, padx=20, pady=5, sticky="new")
+        self.calcsf = Sf(master=self)
+        self.calcsf.grid(row=2, column=0, padx=20, pady=5, sticky="new")
+
        
 
 if __name__ == "__main__":
-    app = MainMenu()
+    app = Main()
     app.mainloop()
