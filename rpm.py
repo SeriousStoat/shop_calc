@@ -4,34 +4,28 @@
 from customtkinter import *
 from math import pi
 
-class Rpm_Calc(CTk):
-    def __init__(self):
-        super().__init__()
-        # Window and Theme Settings
-        self.title("Shop Calculator")
-        self.evwidth = 400 #width of entry widget
-        self.bwidth1 = self.evwidth/4 - 20
-        self.configure(fg_color="#181b1f")
+class RpmCalc(CTkFrame):
+    def __init__(self, master, **kwargs):
+        super().__init__(master, **kwargs)
         # SF Input
-        CTkLabel(master=self, text="Enter your Surface Footage: ").grid(column=1, row=1, sticky=(E))
+        CTkLabel(master=self, text="Surface Footage:").grid(column=2, row=1, sticky="e")
         self.sf = StringVar()
         sf_entry = CTkEntry(master=self, width=50, textvariable=self.sf)
-        sf_entry.grid(column=2, row=1, sticky=(W, E))
-        CTkLabel(master=self, text=" Feet per Minute ").grid(column=3, row=1, sticky=(W))
+        sf_entry.grid(column=3, row=1, padx=5)
         # Dia Input
-        CTkLabel(master=self, text="Enter your part Diamiter: ").grid(column=1, row=2, sticky=(E))
+        CTkLabel(master=self, text="Part or Cutter Dia:").grid(column=2, row=2, padx="40 0", sticky="e")
         self.dia = StringVar()
         dia_entry = CTkEntry(master=self, width=50, textvariable=self.dia)
-        dia_entry.grid(column=2, row=2, sticky=(W, E))
-        CTkLabel(master=self, text=" Inches ").grid(column=3, row=2, sticky=(W))
+        dia_entry.grid(column=3, row=2)
+        
         # RPM Output
         self.rpm = StringVar()
-        CTkLabel(master=self, text="Set your Spindle RPMs to: ").grid(column=1, row=3, sticky=(E))
-        CTkLabel(master=self, textvariable=self.rpm).grid(column=2, row=3, sticky=(W))
-        self.calc= CTkButton(master=self, text="Calculate", command=self.calculate, width=self.bwidth1)
-        self.calc.grid(row=4, column=1, pady=15, padx=20)
+        CTkLabel(master=self, width=40, justify="right", textvariable=self.rpm).grid(column=4, row=1, rowspan=2, padx=5, sticky="e")
+        CTkLabel(master=self, text=" RPMs").grid(column=5, row=1, rowspan=2, sticky="w")
 
-
+        # Calculate Button
+        self.calc= CTkButton(master=self, text="Calculate RPMs", command=self.calculate)
+        self.calc.grid(column=1, row=1, rowspan=2, pady=5, padx=5)
 
     def calculate(self, *args):
         try:
@@ -40,10 +34,6 @@ class Rpm_Calc(CTk):
             self.rpm.set(int((get_sf*12)/(pi*get_dia)))
         except ValueError:
             pass
-
-if __name__ == "__main__":
-    app = Rpm_Calc()
-    app.mainloop()
 
 
             
