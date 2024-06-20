@@ -4,19 +4,47 @@
 from customtkinter import *
 from math import pi
 
-class App(CTk):
+class Rpm_Calc(CTk):
     def __init__(self):
-        super.()__init__()
+        super().__init__()
+        # Window and Theme Settings
         self.title("Shop Calculator")
         self.evwidth = 400 #width of entry widget
         self.bwidth1 = self.evwidth/4 - 20
         self.configure(fg_color="#181b1f")
-        self.values = CTkEntry(master=self, width=self.evwidth)
-        self.values.grid(row=0, column=0, columnspan=4, padx=10, pady=10)
-        self.calc= CTkButton(master=self, text="Calculate", command=self.evaluate, width=self.bwidth1)
-        self.calc.grid(row=4, column=1, pady=5, padx=10)
-    def calc_rpm(*arg):
-        get_sf = sf(get())
-        get_dia = dia(get())
-        lambda sf, dia: rpm((sf_get*12)/(pi*get_dia))
+        # SF Input
+        CTkLabel(master=self, text="Enter your Surface Footage: ").grid(column=1, row=1, sticky=(E))
+        self.sf = StringVar()
+        sf_entry = CTkEntry(master=self, width=50, textvariable=self.sf)
+        sf_entry.grid(column=2, row=1, sticky=(W, E))
+        CTkLabel(master=self, text=" Feet per Minute ").grid(column=3, row=1, sticky=(W))
+        # Dia Input
+        CTkLabel(master=self, text="Enter your part Diamiter: ").grid(column=1, row=2, sticky=(E))
+        self.dia = StringVar()
+        dia_entry = CTkEntry(master=self, width=50, textvariable=self.dia)
+        dia_entry.grid(column=2, row=2, sticky=(W, E))
+        CTkLabel(master=self, text=" Inches ").grid(column=3, row=2, sticky=(W))
+        # RPM Output
+        self.rpm = StringVar()
+        CTkLabel(master=self, text="Set your Spindle RPMs to: ").grid(column=1, row=3, sticky=(E))
+        CTkLabel(master=self, textvariable=self.rpm).grid(column=2, row=3, sticky=(W))
+        self.calc= CTkButton(master=self, text="Calculate", command=self.calculate, width=self.bwidth1)
+        self.calc.grid(row=4, column=1, pady=15, padx=20)
+
+
+
+    def calculate(self, *args):
+        try:
+            get_sf = int(self.sf.get())
+            get_dia = float(self.dia.get())
+            self.rpm.set(int((get_sf*12)/(pi*get_dia)))
+        except ValueError:
+            pass
+
+if __name__ == "__main__":
+    app = Rpm_Calc()
+    app.mainloop()
+
+
+            
 
