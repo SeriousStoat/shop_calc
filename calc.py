@@ -51,10 +51,13 @@ class SpeedFeed(CTkFrame):
             self.msg_frame.label.configure(text_color="green")
             
         except ValueError:
-            self.msg_frame.msg.set("Calc Error : Please enter valid numbers.")
+            self.msg_frame.msg.set("Calculation Error : Please enter valid numbers.")
             self.msg_frame.label.configure(text_color="Tomato")
             self.rpm.set("")
-
+        except ZeroDivisionError:
+            self.msg_frame.msg.set("Calculation Error : Cannot divide by zero.")
+            self.msg_frame.label.configure(text_color="Tomato")
+            self.rpm.set("")
      # This needs to be incorperated into the SpeedsFeeds class   
 # class Sf(CTkFrame):
 #     def __init__(self, master, **kwargs):
