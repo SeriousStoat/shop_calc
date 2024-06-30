@@ -3,16 +3,16 @@
 
 from customtkinter import *
 from math import pi
-from msg import Msg
+from msg import MsgBar
 
 class SpeedFeed(CTkFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
 
         # Message Bar
-        self.msg_frame = Msg(master=self, corner_radius=5, fg_color="#181818", width=600)
+        self.msg_frame = MsgBar(master=self, corner_radius=5, fg_color="#181818", width=600)
         self.msg_frame.pack(fill="both", expand=True, padx=30, pady=5)
-        self.msg_frame.msg.set("Speeds & Feeds: Fill out a form and click 'Calculate'")
+        self.msg_frame.label.configure(text="Speeds & Feeds: fill out a form and click 'Calculate' or 'Enter'.", text_color="#e0e0e0")
 
         # Rpm Frame
         rpm_frame = CTkFrame(master=self, corner_radius=0)
@@ -47,16 +47,12 @@ class SpeedFeed(CTkFrame):
             give_rpm = (round((get_sf*12)/(pi*get_dia)))
             self.rpm.set(f"{give_rpm} rpm")
             # Message
-            self.msg_frame.msg.set("RPMs Calculated")
-            self.msg_frame.label.configure(text_color="green")
-            
+            self.msg_frame.label.configure(text="RPMs Calculated", text_color="green")           
         except ValueError:
-            self.msg_frame.msg.set("Calculation Error : Please enter valid numbers.")
-            self.msg_frame.label.configure(text_color="Tomato")
+            self.msg_frame.label.configure(text="Calculation Error : Please enter valid numbers.", text_color="Tomato")
             self.rpm.set("")
         except ZeroDivisionError:
-            self.msg_frame.msg.set("Calculation Error : Cannot divide by zero.")
-            self.msg_frame.label.configure(text_color="Tomato")
+            self.msg_frame.label.configure(text="Calculation Error : Cannot divide by zero.",text_color="Tomato")
             self.rpm.set("")
      # This needs to be incorperated into the SpeedsFeeds class   
 # class Sf(CTkFrame):
