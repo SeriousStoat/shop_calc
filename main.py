@@ -26,11 +26,13 @@ class Main(CTk):
         self.speed_feed = SpeedFeed(master=self, corner_radius=0)
         self.speed_feed.grid(row=1, column=0, columnspan=3, pady=5, sticky="new")
 
-        self.bind('<Return>', self.focus)
+        self.focus()
 
     def focus(self, *args):
-        if self.focus_get() == ".!speedfeed.!ctkframe.!ctkentry.!entry" or ".!speedfeed.!ctkframe.!ctkentry2.!entry":
-            self.bind('<Return>', self.speed_feed.calc_rpm)
+        while True:
+            if self.focus_get() == ".!speedfeed.!ctkframe.!ctkentry.!entry" or ".!speedfeed.!ctkframe.!ctkentry2.!entry":
+                self.bind('<Return>', self.speed_feed.calc_rpm)
+                break
 
 if __name__ == "__main__":
     app = Main()
