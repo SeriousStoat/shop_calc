@@ -26,14 +26,6 @@ class Main(CTk):
         self.speed_feed = SpeedFeed(master=self, corner_radius=0)
         self.speed_feed.grid(row=1, column=0, columnspan=3, pady=5, sticky="new")
 
-        self.speed_feed.rpm_frame.bind("<FocusIn>", self.rpmFocus)
-        self.speed_feed.sf_frame.bind("<FocusIn>", self.sfFocus)
-
-    def rpmFocus(self, *args):
-                self.bind('<Return>', self.speed_feed.calcRpm)
-    def sfFocus(self, *args):
-                self.bind('<Return>', self.speed_feed.calcSf)
-
 if __name__ == "__main__":
     app = Main()
     app.mainloop()
