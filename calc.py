@@ -20,16 +20,16 @@ class SpeedFeed(CTkFrame):
 
             # Calculate Button
         self.calcrpm = CTkButton(master=self.rpm_frame, text="Calculate RPMs", command=self.calcRpm)
-        self.calcrpm.grid(column=1, row=1, rowspan=2, pady=5, padx=5)
+        self.calcrpm.grid(column=1, row=1, rowspan=2, pady=5, padx=(5,40))
 
             # SFM Input
-        CTkLabel(master=self.rpm_frame, text="Surface Footage = ").grid(column=2, row=1, sticky="e")
+        CTkLabel(master=self.rpm_frame, text="Surface Footage ").grid(column=2, row=1, sticky="e")
         self.rpm_sfm = StringVar()
         self.rpm_sfm_entry = CTkEntry(master=self.rpm_frame, width=50, textvariable=self.rpm_sfm)
         self.rpm_sfm_entry.grid(column=3, row=1, padx=5)
 
             # Dia Input
-        CTkLabel(master=self.rpm_frame, text="Part or Cutter Dia = ").grid(column=2, row=2, padx="40 0", sticky="e")
+        CTkLabel(master=self.rpm_frame, text="Part or Cutter Dia ").grid(column=2, row=2, sticky="e")
         self.rpm_dia = StringVar()
         self.rpm_dia_entry = CTkEntry(master=self.rpm_frame, width=50, textvariable=self.rpm_dia)
         self.rpm_dia_entry.grid(column=3, row=2)
@@ -46,18 +46,18 @@ class SpeedFeed(CTkFrame):
 
             # Calculate Button
         self.calcsfm= CTkButton(master=self.sfm_frame, text="Calculate SFM", command=self.calcSfm)
-        self.calcsfm.grid(column=1, row=1, rowspan=2, pady=5, padx=5)
+        self.calcsfm.grid(column=1, row=1, rowspan=2, pady=5, padx=(5,40))
 
             # RPM Input
-        CTkLabel(master=self.sfm_frame, text="RPMs:").grid(column=2, row=1, sticky="e")
-        self.sf_rpm = StringVar()
-        self.sfm_rpm_entry = CTkEntry(master=self.sfm_frame, width=50, textvariable=self.sf_rpm)
+        CTkLabel(master=self.sfm_frame, text="RPMs ").grid(column=2, row=1, sticky="e")
+        self.sfm_rpm = StringVar()
+        self.sfm_rpm_entry = CTkEntry(master=self.sfm_frame, width=50, textvariable=self.sfm_rpm)
         self.sfm_rpm_entry.grid(column=3, row=1, padx=5)
 
             # Dia Input
-        CTkLabel(master=self.sfm_frame, text="Part or Cutter Dia:").grid(column=2, row=2, padx="40 0", sticky="e")
-        self.sf_dia = StringVar()
-        self.sfm_dia_entry = CTkEntry(master=self.sfm_frame, width=50, textvariable=self.sf_dia)
+        CTkLabel(master=self.sfm_frame, text="Part or Cutter Dia ").grid(column=2, row=2, sticky="e")
+        self.sfm_dia = StringVar()
+        self.sfm_dia_entry = CTkEntry(master=self.sfm_frame, width=50, textvariable=self.sfm_dia)
         self.sfm_dia_entry.grid(column=3, row=2)
         
             # RPM Output
@@ -65,41 +65,86 @@ class SpeedFeed(CTkFrame):
         CTkLabel(master=self.sfm_frame, text=">").grid(column=4, row=1, rowspan=2, padx=5, sticky="e")
         CTkLabel(master=self.sfm_frame, width=40, justify="right", textvariable=self.sfm, text_color="orange")\
             .grid(column=5, row=1, rowspan=2, padx=5, sticky="e")
+        
+        # Feed Frame
+        self.feed_frame = CTkFrame(master=self, corner_radius=0)
+        self.feed_frame.pack(fill="both", expand=True, pady=5)
+
+            # Calulation Button
+        self.calcfeed= CTkButton(master=self.feed_frame, text="Calculate Feed (ipm)", command=self.calcFeed)
+        self.calcfeed.grid(column=1, row=1, rowspan=3, pady=5, padx=(5,40))
+
+            # RPM Input
+        CTkLabel(master=self.feed_frame, text="RPMs ").grid(column=2, row=1, sticky="e")
+        self.feed_rpm = StringVar()
+        self.feed_rpm_entry = CTkEntry(master=self.feed_frame, width=50, textvariable=self.feed_rpm)
+        self.feed_rpm_entry.grid(column=3, row=1, padx=5)
+
+            # IPR Input
+        CTkLabel(master=self.feed_frame, text="IPR ").grid(column=2, row=2, sticky="e")
+        self.feed_ipr = StringVar()
+        self.feed_ipr_entry = CTkEntry(master=self.feed_frame, width=50, textvariable=self.feed_ipr)
+        self.feed_ipr_entry.grid(column=3, row=2, padx=5)
+
+            # Teeth Input
+        CTkLabel(master=self.feed_frame, text="Number of Teeth ").grid(column=2, row=3, sticky="e")
+        self.feed_teeth = StringVar()
+        self.feed_teeth_entry = CTkEntry(master=self.feed_frame, width=50, textvariable=self.feed_teeth)
+        self.feed_teeth_entry.grid(column=3, row=3, padx=5)
+
+            # Feed Output
+        self.feed = StringVar()
+        CTkLabel(master=self.feed_frame, text="> ").grid(column=4, row=1, rowspan=3, padx=5, sticky="e")
+        CTkLabel(master=self.feed_frame, width=40, justify="right", textvariable=self.feed, text_color="orange")\
+            .grid(column=5, row=1, rowspan=3, padx=5, sticky="e")
 
         # Focus Rules
         self.rpm_sfm_entry.bind('<Return>', self.calcRpm)
         self.rpm_dia_entry.bind('<Return>', self.calcRpm)
         self.sfm_rpm_entry.bind('<Return>', self.calcSfm)
         self.sfm_dia_entry.bind('<Return>', self.calcSfm)
+        self.feed_rpm_entry.bind('<Return>', self.calcFeed)
+        self.feed_ipr_entry.bind('<Return>', self.calcFeed)
+        self.feed_teeth_entry.bind('<Return>', self.calcFeed)
         self.rpm_sfm_entry.focus()
 
     # Speed & Feed Calculations
     def calcRpm(self, *args):
         try:
-            get_sfm = int(self.rpm_sfm.get())
-            get_dia = float(self.rpm_dia.get())
-            give_rpm = (round((get_sfm*12)/(pi*get_dia)))
-            self.rpm.set(f"{give_rpm} rpm")
+            sfm = int(self.rpm_sfm.get())
+            dia = float(self.rpm_dia.get())
+            rpm = (round((sfm*12)/(pi*dia)))
+            self.rpm.set(f"{rpm} rpm")
             # Message
-            self.msg_frame.label.configure(text="RPMs Calculated", text_color="green")           
+            self.msg_frame.label.configure(text=(f"RPMs Calculated @ {rpm} revolutions per minute."), text_color="green")           
         except ValueError:
             self.msg_frame.label.configure(text="RPM Calculation Error : Please enter valid numbers.", text_color="Tomato")
             self.rpm.set("")
         except ZeroDivisionError:
-            self.msg_frame.label.configure(text="RPM Calculation Error : Cannot divide by zero.",text_color="Tomato")
+            self.msg_frame.label.configure(text="RPM Calculation Error : Dia cannot be zero.",text_color="Tomato")
             self.rpm.set("")
 
     def calcSfm(self, *args):
         try:
-            get_rpm = int(self.sf_rpm.get())
-            get_dia = float(self.sf_dia.get())
-            give_sfm = (round((get_rpm*pi*get_dia)/12))
-            self.sfm.set(f"{give_sfm} sfm")
+            rpm = int(self.sfm_rpm.get())
+            dia = float(self.sfm_dia.get())
+            sfm = (round((rpm*pi*dia)/12))
+            self.sfm.set(f"{sfm} sfm")
             # Message
-            self.msg_frame.label.configure(text="SFM Calculated", text_color="green")   
+            self.msg_frame.label.configure(text=(f"SFM Calculated @ {sfm} surface feet per minute."), text_color="green")   
         except ValueError:
             self.msg_frame.label.configure(text="SFM Calculation Error : Please enter valid numbers.", text_color="Tomato")
             self.sfm.set("")
-        except ZeroDivisionError:
-            self.msg_frame.label.configure(text="SFM Calculation Error : Cannot divide by zero.",text_color="Tomato")
+    
+    def calcFeed(self, *args):
+        try:
+            rpm = int(self.feed_rpm.get())
+            ipr = float(self.feed_ipr.get())
+            teeth = int(self.feed_teeth.get())
+            feed = round(rpm*ipr*teeth, 2)
+            self.feed.set(f"{feed} ipm")
+            # Message
+            self.msg_frame.label.configure(text=(f"Feed Calculated @ {feed} inches per minute."), text_color="green")   
+        except ValueError:
+            self.msg_frame.label.configure(text="Feed Calculation Error : Please enter valid numbers.", text_color="Tomato")
             self.sfm.set("")
