@@ -150,6 +150,9 @@ class SpeedFeed(CTkFrame):
             dia = float(self.rpm_dia.get())
             rpm = (round((sfm*12)/(pi*dia)))
             self.rpm.set(f"{rpm} rpm")
+            self.sfm_rpm.set(rpm)
+            self.feed_rpm.set(rpm)
+            self.chip_rpm.set(rpm)
             # Message
             self.msg_frame.label.configure(text=(f"RPMs Calculated @ {rpm} revolutions per minute."), text_color="green")           
         except ValueError:
