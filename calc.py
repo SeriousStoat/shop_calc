@@ -86,7 +86,7 @@ class SpeedFeed(CTkFrame):
         self.feed_ipr_entry = CTkEntry(master=self.feed_frame, width=50, textvariable=self.feed_ipr)
         self.feed_ipr_entry.grid(column=3, row=2, padx=5)
 
-            # Teeth Input
+            # Teeth Input                                                       
         CTkLabel(master=self.feed_frame, text="Number of Teeth ").grid(column=2, row=3, sticky="e")
         self.feed_teeth = StringVar()
         self.feed_teeth_entry = CTkEntry(master=self.feed_frame, width=50, textvariable=self.feed_teeth)
@@ -97,8 +97,40 @@ class SpeedFeed(CTkFrame):
         CTkLabel(master=self.feed_frame, text="> ").grid(column=4, row=1, rowspan=3, padx=5, sticky="e")
         CTkLabel(master=self.feed_frame, width=40, justify="right", textvariable=self.feed, text_color="orange")\
             .grid(column=5, row=1, rowspan=3, padx=5, sticky="e")
+        
+        # Chipload Frame
+        self.chipload_frame = CTkFrame(master=self, corner_radius=0)
+        self.chipload_frame.pack(fill="both", expand=True, pady=5)
 
-        # Focus Rules
+            # Calulation Button
+        self.calcfeed= CTkButton(master=self.chipload_frame, text="Calculate Feed (ipm)", command=self.calcChip)
+        self.calcfeed.grid(column=1, row=1, rowspan=3, pady=5, padx=(5,40))
+
+            # RPM Input
+        CTkLabel(master=self.chipload_frame, text="RPMs ").grid(column=2, row=1, sticky="e")
+        self.chip_rpm = StringVar()
+        self.chip_rpm_entry = CTkEntry(master=self.chipload_frame, width=50, textvariable=self.chip_rpm)
+        self.chip_rpm_entry.grid(column=3, row=1, padx=5)
+
+            # Feed Input
+        CTkLabel(master=self.chipload_frame, text="Feed(ipm) ").grid(column=2, row=2, sticky="e")
+        self.chip_feed = StringVar()
+        self.chip_feed_entry = CTkEntry(master=self.chipload_frame, width=50, textvariable=self.chip_feed)
+        self.chip_feed_entry.grid(column=3, row=2, padx=5)
+
+            # Teeth Input                                                       
+        CTkLabel(master=self.chipload_frame, text="Number of Teeth ").grid(column=2, row=3, sticky="e")
+        self.chip_teeth = StringVar()
+        self.chip_teeth_entry = CTkEntry(master=self.chipload_frame, width=50, textvariable=self.chip_teeth)
+        self.chip_teeth_entry.grid(column=3, row=3, padx=5)
+
+            # Chipload Output
+        self.chipload = StringVar()
+        CTkLabel(master=self.chipload_frame, text="> ").grid(column=4, row=1, rowspan=3, padx=5, sticky="e")
+        CTkLabel(master=self.chipload_frame, width=40, justify="right", textvariable=self.chipload, text_color="orange")\
+            .grid(column=5, row=1, rowspan=3, padx=5, sticky="e")
+
+        # Keybinding-Focus Rules
         self.rpm_sfm_entry.bind('<Return>', self.calcRpm)
         self.rpm_dia_entry.bind('<Return>', self.calcRpm)
         self.sfm_rpm_entry.bind('<Return>', self.calcSfm)
@@ -106,6 +138,9 @@ class SpeedFeed(CTkFrame):
         self.feed_rpm_entry.bind('<Return>', self.calcFeed)
         self.feed_ipr_entry.bind('<Return>', self.calcFeed)
         self.feed_teeth_entry.bind('<Return>', self.calcFeed)
+        self.chip_rpm_entry.bind('<Return>', self.calcChip)
+        self.chip_feed_entry.bind('<Return>', self.calcChip)
+        self.chip_teeth_entry.bind('<Return>', self.calcChip)
         self.rpm_sfm_entry.focus()
 
     # Speed & Feed Calculations
@@ -148,3 +183,19 @@ class SpeedFeed(CTkFrame):
         except ValueError:
             self.msg_frame.label.configure(text="Feed Calculation Error : Please enter valid numbers.", text_color="Tomato")
             self.sfm.set("")
+
+    def calcChip(self, *args):
+        try:
+            rpm = int(self.chip_rpm.get())
+            feed = float(self.chip_feed.get())
+            teeth = int(self.chip_teeth.get())
+            chipload = round(feed/(rpm*teeth), 4)
+            self.chipload.set(f"{chipload} ipr")
+            # Message
+            self.msg_frame.label.configure(text=(f"Chipload Calculated @ {feed} inches per revolution."), text_color="green")   
+        except ValueError:
+            self.msg_frame.label.configure(text="Chipload Calculation Error : Please enter valid numbers.", text_color="Tomato")
+            self.sfm.set("")
+        except ZeroDivisionError:
+            self.msg_frame.label.configure(text="Chipload Calculation Error : rpm and teeth cannot be zero.",text_color="Tomato")
+            self.rpm.set("")
