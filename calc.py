@@ -81,7 +81,7 @@ class SpeedFeed(CTkFrame):
         self.feed_rpm_entry.grid(column=3, row=1, padx=5)
 
             # IPR Input
-        CTkLabel(master=self.feed_frame, text="IPR ").grid(column=2, row=2, sticky="e")
+        CTkLabel(master=self.feed_frame, text="Chipload (ipr) ").grid(column=2, row=2, sticky="e")
         self.feed_ipr = StringVar()
         self.feed_ipr_entry = CTkEntry(master=self.feed_frame, width=50, textvariable=self.feed_ipr)
         self.feed_ipr_entry.grid(column=3, row=2, padx=5)
@@ -142,17 +142,38 @@ class SpeedFeed(CTkFrame):
         self.chip_feed_entry.bind('<Return>', self.calcChip)
         self.chip_teeth_entry.bind('<Return>', self.calcChip)
         self.rpm_sfm_entry.focus()
+    
+    # Calulations
+    def calc(self, selection):
+        if selection == "rpm":
+            return round((int(self.rpm_sfm.get())*12)/(pi*float(self.rpm_dia.get())))
+        elif selection == "sfm":
+            return round((int(self.sfm_rpm.get())*pi*float(self.sfm_dia.get()))/12)
+        elif selection == "feed":
+            return round(int(self.feed_rpm.get())*float(self.feed_ipr.get())*int(self.feed_teeth.get()), 2)
+        elif selection == "chipload":
+            return round(float(self.chip_feed.get())/(int(self.chip_rpm.get())*int(self.chip_teeth.get())), 4)
 
-    # Speed & Feed Calculations
+    # Speed & Feeds
     def calcRpm(self, *args):
         try:
-            sfm = int(self.rpm_sfm.get())
-            dia = float(self.rpm_dia.get())
-            rpm = (round((sfm*12)/(pi*dia)))
+            # Set Local Var
+            rpm = self.calc("rpm")
             self.rpm.set(f"{rpm} rpm")
+            # Set Outside Vars
             self.sfm_rpm.set(rpm)
+            self.sfm_dia.set(self.rpm_dia.get())
+            self.sfm.set(f"*{self.rpm_sfm.get()} sfm")
             self.feed_rpm.set(rpm)
+            try:
+                self.feed.set(f'*{self.calc("feed")} ipm')
+            except:
+                pass
             self.chip_rpm.set(rpm)
+            try:
+                self.chipload.set(f'*{self.calc("chipload")} ipr')
+            except:
+                pass
             # Message
             self.msg_frame.label.configure(text=(f"RPMs Calculated @ {rpm} revolutions per minute."), text_color="green")           
         except ValueError:
@@ -164,10 +185,23 @@ class SpeedFeed(CTkFrame):
 
     def calcSfm(self, *args):
         try:
-            rpm = int(self.sfm_rpm.get())
-            dia = float(self.sfm_dia.get())
-            sfm = (round((rpm*pi*dia)/12))
+            # Set Local Var
+            sfm = self.calc("sfm")
             self.sfm.set(f"{sfm} sfm")
+            # Set Outside Vars
+            self.rpm_sfm.set(sfm)
+            self.rpm_dia.set(self.sfm_dia.get())
+            self.rpm.set(f"*{self.sfm_rpm.get()} rpm")
+            self.feed_rpm.set(self.sfm_rpm.get())
+            try:
+                self.feed.set(f'*{self.calc("feed")} ipm')
+            except:
+                pass
+            self.chip_rpm.set(self.sfm_rpm.get())
+            try:
+                self.chipload.set(f'*{self.calc("chipload")} ipr')
+            except:
+                pass
             # Message
             self.msg_frame.label.configure(text=(f"SFM Calculated @ {sfm} surface feet per minute."), text_color="green")   
         except ValueError:
@@ -176,29 +210,40 @@ class SpeedFeed(CTkFrame):
     
     def calcFeed(self, *args):
         try:
-            rpm = int(self.feed_rpm.get())
-            ipr = float(self.feed_ipr.get())
-            teeth = int(self.feed_teeth.get())
-            feed = round(rpm*ipr*teeth, 2)
+            # Main Calculation
+            feed = self.calc("feed")
             self.feed.set(f"{feed} ipm")
+            # Set Other Calculations
+            self.chip_feed.set(feed)
+            self.chip_teeth.set(self.feed_teeth.get())
+            self.chipload.set(f"*{self.feed_ipr.get()} chipload")
+            self.sfm_rpm.set(self.feed_rpm.get())
+            try:
+                self.sfm.set(f'*{self.calc("sfm")} sfm')
+                self.rpm_sfm.set(self.calc("sfm"))
+                self.rpm.set(f'*{self.calc("rpm")} rpm')
+            except:
+                pass
             # Message
             self.msg_frame.label.configure(text=(f"Feed Calculated @ {feed} inches per minute."), text_color="green")   
         except ValueError:
             self.msg_frame.label.configure(text="Feed Calculation Error : Please enter valid numbers.", text_color="Tomato")
-            self.sfm.set("")
+            self.feed.set("")
 
     def calcChip(self, *args):
         try:
-            rpm = int(self.chip_rpm.get())
-            feed = float(self.chip_feed.get())
-            teeth = int(self.chip_teeth.get())
-            chipload = round(feed/(rpm*teeth), 4)
-            self.chipload.set(f"{chipload} ipr")
+            # Main Calculation
+            chipload = self.calc("chipload")
+            self.chipload.set(f"{chipload} chipload")
+            # Set Other Calculations
+            self.feed_ipr.set(chipload)
+            self.feed_teeth.set(self.chip_teeth.get())
+            self.feed.set(f"*{self.chip_feed.get()} ipm")
             # Message
-            self.msg_frame.label.configure(text=(f"Chipload Calculated @ {feed} inches per revolution."), text_color="green")   
+            self.msg_frame.label.configure(text=(f"Chipload Calculated @ {chipload} inches per revolution."), text_color="green")   
         except ValueError:
             self.msg_frame.label.configure(text="Chipload Calculation Error : Please enter valid numbers.", text_color="Tomato")
-            self.sfm.set("")
+            self.chipload.set("")
         except ZeroDivisionError:
             self.msg_frame.label.configure(text="Chipload Calculation Error : rpm and teeth cannot be zero.",text_color="Tomato")
-            self.rpm.set("")
+            self.chipload.set("")
