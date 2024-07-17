@@ -15,7 +15,7 @@ class Main(CTk):
         super().__init__()
         # Window and Theme Settings
         self.title("Shop Calculator")
-        self.geometry("600x450+200+200")
+        self.geometry("600x515+200+200")
         self.columnconfigure(1, weight=1)
 
         # Header Frame

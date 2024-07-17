@@ -28,7 +28,7 @@ class SpeedFeed(CTkFrame):
 
             # Calculate Button
         self.calcrpm = CTkButton(master=self.rpm_frame, text="Calculate RPMs", command=self.calcRpm)
-        self.calcrpm.grid(column=1, row=1, rowspan=2, pady=5, padx=(5,40))
+        self.calcrpm.grid(column=1, row=1, rowspan=2, pady=20, padx=(5,40))
 
             # SFM Input
         CTkLabel(master=self.rpm_frame, text="Surface Footage ").grid(column=2, row=1, sticky="e")
@@ -53,7 +53,7 @@ class SpeedFeed(CTkFrame):
 
             # Calculate Button
         self.calcsfm= CTkButton(master=self.sfm_frame, text="Calculate SFM", command=self.calcSfm)
-        self.calcsfm.grid(column=1, row=1, rowspan=2, pady=5, padx=(5,40))
+        self.calcsfm.grid(column=1, row=1, rowspan=2, pady=20, padx=(5,40))
 
             # RPM Input
         CTkLabel(master=self.sfm_frame, text="RPMs ").grid(column=2, row=1, sticky="e")
@@ -77,8 +77,8 @@ class SpeedFeed(CTkFrame):
         self.feed_frame = calcFrame(self)
 
             # Calulation Button
-        self.calcfeed= CTkButton(master=self.feed_frame, text="Calculate Feed (ipm)", command=self.calcFeed)
-        self.calcfeed.grid(column=1, row=1, rowspan=3, pady=5, padx=(5,40))
+        self.calcfeed= CTkButton(master=self.feed_frame, text="Calculate Feed\n(ipm)", command=self.calcFeed)
+        self.calcfeed.grid(column=1, row=1, rowspan=3, pady=30, padx=(5,40))
 
             # RPM Input
         CTkLabel(master=self.feed_frame, text="RPMs ").grid(column=2, row=1, sticky="e")
@@ -108,8 +108,8 @@ class SpeedFeed(CTkFrame):
         self.chipload_frame = calcFrame(self)
 
             # Calulation Button
-        self.calcfeed= CTkButton(master=self.chipload_frame, text="Calculate Feed (ipm)", command=self.calcChip)
-        self.calcfeed.grid(column=1, row=1, rowspan=3, pady=5, padx=(5,40))
+        self.calcfeed= CTkButton(master=self.chipload_frame, text="Calculate Chipload\n(ipm)", command=self.calcChip)
+        self.calcfeed.grid(column=1, row=1, rowspan=3, pady=30, padx=(5,40))
 
             # RPM Input
         CTkLabel(master=self.chipload_frame, text="RPMs ").grid(column=2, row=1, sticky="e")
@@ -118,7 +118,7 @@ class SpeedFeed(CTkFrame):
         self.chip_rpm_entry.grid(column=3, row=1, padx=5)
 
             # Feed Input
-        CTkLabel(master=self.chipload_frame, text="Feed(ipm) ").grid(column=2, row=2, sticky="e")
+        CTkLabel(master=self.chipload_frame, text="Feed (ipm) ").grid(column=2, row=2, sticky="e")
         self.chip_feed = StringVar()
         self.chip_feed_entry = CTkEntry(master=self.chipload_frame, width=entry_width, textvariable=self.chip_feed)
         self.chip_feed_entry.grid(column=3, row=2, padx=5)
