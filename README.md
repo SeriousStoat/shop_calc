@@ -1,12 +1,19 @@
 # Machine Shop Calculator
 A machine shop calculator written in python.
 
-**Status:** *In Early Development*
+**Version:** 0.0.3  
+**Status:** Speed & Feed Calc is working, refining code...
 
-## Goals
-The goal of this project is to created a shop calulator app for machinists and other shop workers.
+## Features
+- Calculations are "adaptive"
+    - Depending on available infomation, running "calculate" (with a button or \<enter>) will also update any other possible calculations.
+    - Results derived from other calculations will be marked with an " * " before the number.
 
 ### Feature Goals
-- Speeds and Feeds calculations for Mill and Lathe work
-- Interactive Shop Calculator for things like, Geometry, Trig, Bolt-Circles, Arcs, etc...
+- Calculator options for:
+    1. Geometry
+    2. Trig
+    3. Bolt-Circles
+    4. Arcs
+    5. etc...
 - A Unit Conversion feature that converts between common machine shop units
