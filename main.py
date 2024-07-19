@@ -1,7 +1,7 @@
 # This is the main menu for the Shop Calculator
 # Options in this menu will initiate other Calc instances
 
-from customtkinter import *
+from customtkinter import CTk, CTkFrame, CTkLabel
 from calc import SpeedFeed
 
 class Header(CTkFrame):

@@ -1,7 +1,7 @@
 # This program calculates sfm + dia to get rpm
 # Testing CustomTkInter Module
 
-from customtkinter import *
+from customtkinter import CTkFrame, CTkButton, CTkLabel, StringVar, CTkEntry
 from math import pi
 from msg import MsgBar
 
