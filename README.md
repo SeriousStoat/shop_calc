@@ -1,7 +1,7 @@
 # Machine Shop Calculator
 A machine shop calculator written in python.
 
-**Version:** 0.1.0
+**Version:** 0.1.0  
 **Status:** Speed & Feed Calc is stable and ready for use.
 - Adding additional features next.
 
