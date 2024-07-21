@@ -18,3 +18,17 @@ A machine shop calculator written in python.
     4. Arcs
     5. etc...
 - A Unit Conversion feature that converts between common machine shop units
+
+# Setup and Run
+1. Install Python 3.11.0 or newer
+2. Download source code
+3. Install Python dependancies with pip  
+    `pip install -r path/to/requirments.txt`
+
+4. Run "main.py" with python  
+    `python main.py`
+or
+    `python3 main.py`
+
+5. Enjoy!
+
